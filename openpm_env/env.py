@@ -46,6 +46,7 @@ class OpenPMEnvironment(Environment[PMAction, PMObservation, PMState]):
 
         scenario = SCENARIOS[scenario_id]
         self._state = self._build_initial_state(scenario, episode_id)
+        self._state.score = grade_for_task(self._state.scenario_id, self._state)
         self._event_log = [f"reset:{scenario_id}"]
 
         return self._build_observation(reward=0.0, done=False)
@@ -153,7 +154,7 @@ class OpenPMEnvironment(Environment[PMAction, PMObservation, PMState]):
             project_completed=False,
             project_failed=False,
             invalid_action_count=0,
-            score=0.0,
+            score=0.01,
             developers=developers,
             tasks=tasks,
         )
