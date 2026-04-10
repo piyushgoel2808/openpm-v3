@@ -286,7 +286,7 @@ def run_task(task_id: str, base_url: str) -> Dict[str, float]:
         score = float(max(0.01, min(0.99, score)))
         success_str = str(success).lower()
         rewards_str = ",".join(f"{r:.2f}" for r in rewards_history)
-        print(f"[END] success={success_str} steps={steps_taken} score={score:.2f} rewards={rewards_str}", flush=True)
+        print(f"[END] success={success_str} steps={steps_taken} rewards={rewards_str}", flush=True)
 
     return {
         "score": round(score, 4),
