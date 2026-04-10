@@ -51,9 +51,9 @@ def grade_hard(state: PMState) -> float:
 def grade_for_task(task_id: str, state: PMState) -> float:
     task_id = task_id.lower()
     if task_id == "easy":
-        return grade_easy(state)
+        return _clamp01(grade_easy(state))
     if task_id == "medium":
-        return grade_medium(state)
+        return _clamp01(grade_medium(state))
     if task_id == "hard":
-        return grade_hard(state)
+        return _clamp01(grade_hard(state))
     raise ValueError(f"Unknown task_id: {task_id}")
