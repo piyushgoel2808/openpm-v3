@@ -265,7 +265,17 @@ def run_task(task_id: str, base_url: str) -> Dict[str, float]:
                     rewards_history.append(step_reward)
                     done_str = "true" if result.done else "false"
                     action_str = f"{action.action_type}({action.task_id or ''})"
-                    print(f"[STEP] step={step_idx + 1} action={action_str} reward={step_reward:.2f} done={done_str} error=null", flush=True)
+                    raw_last_error = None
+                    if hasattr(result.observation, "last_action_error"):
+                        raw_last_error = getattr(result.observation, "last_action_error")
+                    elif hasattr(result.observation, "metadata") and isinstance(result.observation.metadata, dict):
+                        raw_last_error = result.observation.metadata.get("last_action_error")
+
+                    error_msg = str(raw_last_error) if raw_last_error else "null"
+                    print(
+                        f"[STEP] step={step_idx + 1} action={action_str} reward={step_reward:.2f} done={done_str} error={error_msg}",
+                        flush=True,
+                    )
                     if result.done:
                         break
                 except Exception as e:

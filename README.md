@@ -18,7 +18,7 @@ tags:
     <img src="https://img.shields.io/badge/OpenEnv-Compliant-success?style=for-the-badge&logo=shield" alt="OpenEnv Compliant" />
     <img src="https://img.shields.io/badge/Status-Live-22c55e?style=for-the-badge&logo=huggingface" alt="Status: Live" />
     <img src="https://img.shields.io/badge/License-MIT-0ea5e9?style=for-the-badge&logo=open-source-initiative" alt="License: MIT" />
-    <a href="https://huggingface.co/spaces/divyanshjha/openpm">
+    <a href="https://huggingface.co/spaces/piyushgoel2808/openpm-finale">
       <img src="https://img.shields.io/badge/Play_on-Hugging_Face-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black" alt="Play on Hugging Face" />
     </a>
   </p>
@@ -40,7 +40,7 @@ Most RL benchmarks focus on games or synthetic, low-stakes puzzles. OpenPM was e
 
 Try the interactive UI or deploy standard OpenEnv agents targeting the endpoint directly.
 
-**Live Hugging Face Space:** [https://huggingface.co/spaces/divyanshjha/openpm](https://huggingface.co/spaces/divyanshjha/openpm)
+**Live Hugging Face Space:** [https://huggingface.co/spaces/piyushgoel2808/openpm-finale](https://huggingface.co/spaces/piyushgoel2808/openpm-finale)
 
 ### Python Client Integration
 
@@ -49,7 +49,7 @@ Try the interactive UI or deploy standard OpenEnv agents targeting the endpoint 
 ```python
 from openpm_env import OpenPMEnv, PMAction
 
-with OpenPMEnv.from_env("divyanshjha/openpm").sync() as env:
+with OpenPMEnv.from_env("piyushgoel2808/openpm-finale").sync() as env:
     result = env.reset(task_id="easy")
 
     # Assign Developer D1 to Task T1
@@ -175,3 +175,52 @@ This result is intentional by design and is the core benchmark signal:
 - Hard is built to require contextual, dynamic replanning at each step. This is the failure boundary where standard heuristics are filtered out and LLM-driven reasoning is required.
 
 OpenPM therefore functions as an LLM-Reasoning Benchmark, not just a generic PM simulator: Easy and Medium validate baseline planning competence, while Hard deliberately tests true adaptive AI planning capabilities under uncertainty.
+
+## OpenEnv Hackathon Compliance Checklist
+
+This section cross-checks OpenPM against the strict submission rules used by the OpenEnv RL Challenge.
+
+### 1) Project Structure
+
+- `inference.py` exists at repository root.
+- Root inference script is the entry point used for benchmark execution.
+
+### 2) LLM Client Requirement
+
+- OpenPM uses `from openai import OpenAI` for model calls.
+- No alternate SDK or direct HTTP calls are used for LLM inference.
+
+### 3) Required Environment Variables
+
+- `API_BASE_URL` is read with a default value.
+- `MODEL_NAME` is read with a default value.
+- `HF_TOKEN` is mandatory and raises `ValueError` when missing.
+
+### 4) Required Stdout Protocol
+
+- `[START] task=<task_name> env=openpm model=<model_name>` is emitted at episode start.
+- `[STEP] step=<n> action=<action_str> reward=<0.00> done=<true|false> error=<msg|null>` is emitted per step.
+- `[END] success=<true|false> steps=<n> rewards=<r1,r2,...,rn>` is always emitted in a `finally` block.
+- Booleans are lowercase (`true`/`false`) and rewards are fixed to two decimals.
+- `score=` is intentionally not present in `[END]`.
+
+### 5) Resource and Runtime Constraints
+
+- Runtime target is lightweight enough for 2 vCPU / 8 GB RAM evaluation containers.
+- `MAX_STEPS = 25` and deterministic heuristic fallback keep episode execution bounded.
+- Dependency set is intentionally minimal (`openenv-core`, `fastapi`, `pydantic`, `uvicorn`, `requests`, `openai`).
+
+### 6) Hugging Face Operational Rules
+
+Before every submission:
+
+1. Ensure your submission Space is fully built and in `Running` state.
+2. Pause or stop all unnecessary Spaces to reduce queueing and throttling risk.
+3. Add required secrets in Space Settings -> Variables and secrets:
+  - `HF_TOKEN`
+  - `OPENAI_API_KEY`
+4. Re-submit only after logs show successful startup.
+
+### 7) Reference Alignment
+
+OpenPM structure is aligned with the same OpenEnv conventions used by reference environments such as `calendar_env`, `reasoning_gym_env`, `tbench2_env`, `carla_env`, and `repl_env` in this workspace.
