@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+from typing import Any
 
-def safe_score(val) -> float:
+
+def safe_score(val: Any) -> float:
     try:
         if val is None:
             return 0.01
