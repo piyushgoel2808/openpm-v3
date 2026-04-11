@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from openpm_env.models import PMState
+from openpm_env.utils import safe_score
 
 
 from pydantic import BaseModel
@@ -19,7 +20,7 @@ class RewardBreakdown(BaseModel):
 
     @property
     def total(self) -> float:
-        return (
+        return safe_score(
             self.progress
             + self.prioritization
             + self.blocker_resolution

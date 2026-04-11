@@ -103,12 +103,12 @@ class OpenPMEnvironment(Environment[PMAction, PMObservation, PMState]):
             helped_blocker=helped_blocker,
             good_prioritization=good_prioritization,
         )
-        reward = round(reward_breakdown.total, 4)
+        reward = safe_score(round(reward_breakdown.total, 4))
 
         self._state.score = safe_score(grade_for_task(self._state.scenario_id, self._state))
 
         done = self._state.project_completed or self._state.project_failed
-        obs = self._build_observation(reward=reward, done=done)
+        obs = self._build_observation(reward=safe_score(reward), done=done)
         obs.metadata["reward_breakdown"] = reward_breakdown.model_dump()
         return obs
 
