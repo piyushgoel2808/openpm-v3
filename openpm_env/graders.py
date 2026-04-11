@@ -38,7 +38,7 @@ def grade_state(state: PMState) -> float:
         # Ensure it is a pure Python float, not a string or numpy type
         grade = float(grade)
         # Clamp to prevent strict boundary (0 or 1) and precision errors
-        grade = max(0.01, min(0.99, grade))
+        grade = _clamp01(grade)
     except (TypeError, ValueError):
         # Fallback for None, missing keys, or malformed structures
         grade = 0.01
@@ -52,7 +52,7 @@ def grade_easy(state: PMState) -> float:
         # Ensure it is a pure Python float, not a string or numpy type
         grade = float(grade)
         # Clamp to prevent strict boundary (0 or 1) and precision errors
-        grade = max(0.01, min(0.99, grade))
+        grade = _clamp01(grade)
     except (TypeError, ValueError):
         # Fallback for None, missing keys, or malformed structures
         grade = 0.01
@@ -66,7 +66,7 @@ def grade_medium(state: PMState) -> float:
         # Ensure it is a pure Python float, not a string or numpy type
         grade = float(grade)
         # Clamp to prevent strict boundary (0 or 1) and precision errors
-        grade = max(0.01, min(0.99, grade))
+        grade = _clamp01(grade)
     except (TypeError, ValueError):
         # Fallback for None, missing keys, or malformed structures
         grade = 0.01
@@ -80,7 +80,7 @@ def grade_hard(state: PMState) -> float:
         # Ensure it is a pure Python float, not a string or numpy type
         grade = float(grade)
         # Clamp to prevent strict boundary (0 or 1) and precision errors
-        grade = max(0.01, min(0.99, grade))
+        grade = _clamp01(grade)
     except (TypeError, ValueError):
         # Fallback for None, missing keys, or malformed structures
         grade = 0.01
@@ -96,7 +96,7 @@ def grade_for_task(task_id: str, state: PMState) -> float:
             # Ensure it is a pure Python float, not a string or numpy type
             grade = float(grade)
             # Clamp to prevent strict boundary (0 or 1) and precision errors
-            grade = max(0.01, min(0.99, grade))
+            grade = _clamp01(grade)
         except (TypeError, ValueError):
             # Fallback for None, missing keys, or malformed structures
             grade = 0.01
@@ -108,7 +108,7 @@ def grade_for_task(task_id: str, state: PMState) -> float:
             # Ensure it is a pure Python float, not a string or numpy type
             grade = float(grade)
             # Clamp to prevent strict boundary (0 or 1) and precision errors
-            grade = max(0.01, min(0.99, grade))
+            grade = _clamp01(grade)
         except (TypeError, ValueError):
             # Fallback for None, missing keys, or malformed structures
             grade = 0.01
@@ -120,7 +120,7 @@ def grade_for_task(task_id: str, state: PMState) -> float:
             # Ensure it is a pure Python float, not a string or numpy type
             grade = float(grade)
             # Clamp to prevent strict boundary (0 or 1) and precision errors
-            grade = max(0.01, min(0.99, grade))
+            grade = _clamp01(grade)
         except (TypeError, ValueError):
             # Fallback for None, missing keys, or malformed structures
             grade = 0.01
