@@ -238,7 +238,7 @@ def run_task(task_id: str, base_url: str) -> Dict[str, float]:
     rewards_history = []
     success = False
     steps_taken = 0
-    score = 0.0
+    score = 0.01
 
     try:
         with OpenPMEnv(base_url=base_url).sync() as env:

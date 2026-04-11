@@ -65,7 +65,7 @@ class PMState(State):
     project_completed: bool = Field(False, description="True if all tasks hit completed status.")
     project_failed: bool = Field(False, description="True if the sprint exceeded days or max invalid actions limit.")
     invalid_action_count: int = Field(0, description="Tracker of how many invalid rules were attempted.")
-    score: float = Field(0.0, description="Running grader score metric.")
+    score: float = Field(0.01, description="Running grader score metric.")
     developers: List[DeveloperSnapshot] = Field(default_factory=list, description="All developers available in the project.")
     tasks: List[TaskSnapshot] = Field(default_factory=list, description="All tasks comprising the sprint.")
 
@@ -84,4 +84,4 @@ class PMObservation(Observation):
     developer_availability: Dict[str, bool] = Field(default_factory=dict, description="Dictionary mapping developer ID strings to a boolean true if they are available.")
     developer_skill_levels: Dict[str, Dict[str, float]] = Field(default_factory=dict, description="Nested dictionary mapping developer ID to their domain skill multipliers (0.0 to 1.0).")
     event_log: List[str] = Field(default_factory=list, description="Recent short log of project events.")
-    score: float = Field(0.0, description="Current evaluation score from 0.0 to 1.0.")
+    score: float = Field(0.01, description="Current evaluation score from 0.0 to 1.0.")
