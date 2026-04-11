@@ -33,27 +33,97 @@ def grade_state(state: PMState) -> float:
     )
     if state.project_completed and not state.project_failed:
         score += 0.2
-    return _clamp01(score)
+    grade = score
+    try:
+        # Ensure it is a pure Python float, not a string or numpy type
+        grade = float(grade)
+        # Clamp to prevent strict boundary (0 or 1) and precision errors
+        grade = max(0.001, min(0.999, grade))
+    except (TypeError, ValueError):
+        # Fallback for None, missing keys, or malformed structures
+        grade = 0.001
+    print(f"DEBUG GRADER - GRADE: {grade}, TYPE: {type(grade)}")
+    return grade
 
 
 def grade_easy(state: PMState) -> float:
-    return grade_state(state)
+    grade = grade_state(state)
+    try:
+        # Ensure it is a pure Python float, not a string or numpy type
+        grade = float(grade)
+        # Clamp to prevent strict boundary (0 or 1) and precision errors
+        grade = max(0.001, min(0.999, grade))
+    except (TypeError, ValueError):
+        # Fallback for None, missing keys, or malformed structures
+        grade = 0.001
+    print(f"DEBUG GRADER - GRADE: {grade}, TYPE: {type(grade)}")
+    return grade
 
 
 def grade_medium(state: PMState) -> float:
-    return grade_state(state)
+    grade = grade_state(state)
+    try:
+        # Ensure it is a pure Python float, not a string or numpy type
+        grade = float(grade)
+        # Clamp to prevent strict boundary (0 or 1) and precision errors
+        grade = max(0.001, min(0.999, grade))
+    except (TypeError, ValueError):
+        # Fallback for None, missing keys, or malformed structures
+        grade = 0.001
+    print(f"DEBUG GRADER - GRADE: {grade}, TYPE: {type(grade)}")
+    return grade
 
 
 def grade_hard(state: PMState) -> float:
-    return grade_state(state)
+    grade = grade_state(state)
+    try:
+        # Ensure it is a pure Python float, not a string or numpy type
+        grade = float(grade)
+        # Clamp to prevent strict boundary (0 or 1) and precision errors
+        grade = max(0.001, min(0.999, grade))
+    except (TypeError, ValueError):
+        # Fallback for None, missing keys, or malformed structures
+        grade = 0.001
+    print(f"DEBUG GRADER - GRADE: {grade}, TYPE: {type(grade)}")
+    return grade
 
 
 def grade_for_task(task_id: str, state: PMState) -> float:
     task_id = task_id.lower()
     if task_id == "easy":
-        return _clamp01(grade_easy(state))
+        grade = grade_easy(state)
+        try:
+            # Ensure it is a pure Python float, not a string or numpy type
+            grade = float(grade)
+            # Clamp to prevent strict boundary (0 or 1) and precision errors
+            grade = max(0.001, min(0.999, grade))
+        except (TypeError, ValueError):
+            # Fallback for None, missing keys, or malformed structures
+            grade = 0.001
+        print(f"DEBUG GRADER - GRADE: {grade}, TYPE: {type(grade)}")
+        return grade
     if task_id == "medium":
-        return _clamp01(grade_medium(state))
+        grade = grade_medium(state)
+        try:
+            # Ensure it is a pure Python float, not a string or numpy type
+            grade = float(grade)
+            # Clamp to prevent strict boundary (0 or 1) and precision errors
+            grade = max(0.001, min(0.999, grade))
+        except (TypeError, ValueError):
+            # Fallback for None, missing keys, or malformed structures
+            grade = 0.001
+        print(f"DEBUG GRADER - GRADE: {grade}, TYPE: {type(grade)}")
+        return grade
     if task_id == "hard":
-        return _clamp01(grade_hard(state))
+        grade = grade_hard(state)
+        try:
+            # Ensure it is a pure Python float, not a string or numpy type
+            grade = float(grade)
+            # Clamp to prevent strict boundary (0 or 1) and precision errors
+            grade = max(0.001, min(0.999, grade))
+        except (TypeError, ValueError):
+            # Fallback for None, missing keys, or malformed structures
+            grade = 0.001
+        print(f"DEBUG GRADER - GRADE: {grade}, TYPE: {type(grade)}")
+        return grade
     raise ValueError(f"Unknown task_id: {task_id}")
