@@ -17,6 +17,7 @@ from openai import OpenAI
 
 from openpm_env import OpenPMEnv, PMAction
 from openpm_env.graders import grade_for_task
+from openpm_env.utils import safe_score
 
 TASKS = ["easy", "medium", "hard"]
 MAX_STEPS = 25
@@ -285,7 +286,7 @@ def run_task(task_id: str, base_url: str) -> Dict[str, float]:
             state = env.state()
 
         duration_s = round(time.time() - start, 3)
-        score = float(grade_for_task(task_id, state))
+        score = safe_score(grade_for_task(task_id, state))
         success = state.project_completed and not state.project_failed
         steps_taken = state.step_count
     except Exception as e:
@@ -293,7 +294,7 @@ def run_task(task_id: str, base_url: str) -> Dict[str, float]:
         print(f"[WARN] run_task_error={str(e)}", flush=True)
 
     finally:
-        score = float(max(0.01, min(0.99, score)))
+        score = safe_score(score)
         success_str = str(success).lower()
         rewards_str = ",".join(f"{r:.2f}" for r in rewards_history)
         print(f"[END] success={success_str} steps={steps_taken} rewards={rewards_str}", flush=True)

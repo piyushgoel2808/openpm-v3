@@ -3,10 +3,11 @@ from __future__ import annotations
 from typing import List
 
 from openpm_env.models import PMState, TaskSnapshot
+from openpm_env.utils import safe_score
 
 
 def _clamp01(value: float) -> float:
-    return float(max(0.01, min(0.99, value)))
+    return safe_score(value)
 
 
 def _count_completed(tasks: List[TaskSnapshot]) -> int:
@@ -33,57 +34,25 @@ def grade_state(state: PMState) -> float:
     )
     if state.project_completed and not state.project_failed:
         score += 0.2
-    grade = score
-    try:
-        # Ensure it is a pure Python float, not a string or numpy type
-        grade = float(grade)
-        # Clamp to prevent strict boundary (0 or 1) and precision errors
-        grade = _clamp01(grade)
-    except (TypeError, ValueError):
-        # Fallback for None, missing keys, or malformed structures
-        grade = 0.01
+    grade = safe_score(score)
     print(f"DEBUG GRADER - GRADE: {grade}, TYPE: {type(grade)}")
     return grade
 
 
 def grade_easy(state: PMState) -> float:
-    grade = grade_state(state)
-    try:
-        # Ensure it is a pure Python float, not a string or numpy type
-        grade = float(grade)
-        # Clamp to prevent strict boundary (0 or 1) and precision errors
-        grade = _clamp01(grade)
-    except (TypeError, ValueError):
-        # Fallback for None, missing keys, or malformed structures
-        grade = 0.01
+    grade = safe_score(grade_state(state))
     print(f"DEBUG GRADER - GRADE: {grade}, TYPE: {type(grade)}")
     return grade
 
 
 def grade_medium(state: PMState) -> float:
-    grade = grade_state(state)
-    try:
-        # Ensure it is a pure Python float, not a string or numpy type
-        grade = float(grade)
-        # Clamp to prevent strict boundary (0 or 1) and precision errors
-        grade = _clamp01(grade)
-    except (TypeError, ValueError):
-        # Fallback for None, missing keys, or malformed structures
-        grade = 0.01
+    grade = safe_score(grade_state(state))
     print(f"DEBUG GRADER - GRADE: {grade}, TYPE: {type(grade)}")
     return grade
 
 
 def grade_hard(state: PMState) -> float:
-    grade = grade_state(state)
-    try:
-        # Ensure it is a pure Python float, not a string or numpy type
-        grade = float(grade)
-        # Clamp to prevent strict boundary (0 or 1) and precision errors
-        grade = _clamp01(grade)
-    except (TypeError, ValueError):
-        # Fallback for None, missing keys, or malformed structures
-        grade = 0.01
+    grade = safe_score(grade_state(state))
     print(f"DEBUG GRADER - GRADE: {grade}, TYPE: {type(grade)}")
     return grade
 
@@ -91,39 +60,15 @@ def grade_hard(state: PMState) -> float:
 def grade_for_task(task_id: str, state: PMState) -> float:
     task_id = task_id.lower()
     if task_id == "easy":
-        grade = grade_easy(state)
-        try:
-            # Ensure it is a pure Python float, not a string or numpy type
-            grade = float(grade)
-            # Clamp to prevent strict boundary (0 or 1) and precision errors
-            grade = _clamp01(grade)
-        except (TypeError, ValueError):
-            # Fallback for None, missing keys, or malformed structures
-            grade = 0.01
+        grade = safe_score(grade_easy(state))
         print(f"DEBUG GRADER - GRADE: {grade}, TYPE: {type(grade)}")
         return grade
     if task_id == "medium":
-        grade = grade_medium(state)
-        try:
-            # Ensure it is a pure Python float, not a string or numpy type
-            grade = float(grade)
-            # Clamp to prevent strict boundary (0 or 1) and precision errors
-            grade = _clamp01(grade)
-        except (TypeError, ValueError):
-            # Fallback for None, missing keys, or malformed structures
-            grade = 0.01
+        grade = safe_score(grade_medium(state))
         print(f"DEBUG GRADER - GRADE: {grade}, TYPE: {type(grade)}")
         return grade
     if task_id == "hard":
-        grade = grade_hard(state)
-        try:
-            # Ensure it is a pure Python float, not a string or numpy type
-            grade = float(grade)
-            # Clamp to prevent strict boundary (0 or 1) and precision errors
-            grade = _clamp01(grade)
-        except (TypeError, ValueError):
-            # Fallback for None, missing keys, or malformed structures
-            grade = 0.01
+        grade = safe_score(grade_hard(state))
         print(f"DEBUG GRADER - GRADE: {grade}, TYPE: {type(grade)}")
         return grade
     raise ValueError(f"Unknown task_id: {task_id}")

@@ -17,6 +17,7 @@ from openpm_env.models import (
 )
 from openpm_env.reward import compute_reward
 from openpm_env.tasks.scenarios import SCENARIOS, ScenarioSpec
+from openpm_env.utils import safe_score
 
 PRIORITY_WEIGHT: Dict[str, float] = {
     "low": 0.25,
@@ -46,7 +47,7 @@ class OpenPMEnvironment(Environment[PMAction, PMObservation, PMState]):
 
         scenario = SCENARIOS[scenario_id]
         self._state = self._build_initial_state(scenario, episode_id)
-        self._state.score = grade_for_task(self._state.scenario_id, self._state)
+        self._state.score = safe_score(grade_for_task(self._state.scenario_id, self._state))
         self._event_log = [f"reset:{scenario_id}"]
 
         return self._build_observation(reward=0.0, done=False)
@@ -104,7 +105,7 @@ class OpenPMEnvironment(Environment[PMAction, PMObservation, PMState]):
         )
         reward = round(reward_breakdown.total, 4)
 
-        self._state.score = grade_for_task(self._state.scenario_id, self._state)
+        self._state.score = safe_score(grade_for_task(self._state.scenario_id, self._state))
 
         done = self._state.project_completed or self._state.project_failed
         obs = self._build_observation(reward=reward, done=done)
@@ -410,13 +411,16 @@ class OpenPMEnvironment(Environment[PMAction, PMObservation, PMState]):
             developer_availability=developer_availability,
             developer_skill_levels=developer_skill_levels,
             event_log=self._event_log[-6:],
-            score=self._state.score,
+            score=safe_score(self._state.score),
         )
         obs.metadata = {
             "project_completed": self._state.project_completed,
             "project_failed": self._state.project_failed,
             "invalid_action_count": self._state.invalid_action_count,
-            "state": self._state.model_dump(),
+            "state": {
+                **self._state.model_dump(),
+                "score": safe_score(self._state.score),
+            },
         }
         return obs
 
